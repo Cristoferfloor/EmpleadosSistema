@@ -8,18 +8,18 @@ RUN apt-get update && apt-get install -y \
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copia los archivos de Laravel
+# Copia todos los archivos del proyecto
 COPY . /var/www/html/
 
-# Configura Apache para servir Laravel desde /public
+# Configura permisos y Apache
 RUN chown -R www-data:www-data /var/www/html \
-    && a2enmod rewrite \
-    && service apache2 restart
+    && a2enmod rewrite
 
+# Establece el directorio de trabajo
 WORKDIR /var/www/html
 
 # Instala dependencias de Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Variables de entorno
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+# Ejecuta migraciones y lanza Apache al iniciar
+CMD php artisan migrate --force && apache2-foreground

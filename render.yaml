@@ -3,7 +3,4 @@ services:
     name: gestion-empleados
     env: docker
     dockerfilePath: ./Dockerfile
-    startCommand: |
-      php artisan migrate --force &&
-      apache2-foreground
     plan: free
