@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gestion-empleados
+    env: php
+    buildCommand: "composer install --no-dev --optimize-autoloader"
+    startCommand: |
+      php artisan migrate --force &&
+      vendor/bin/heroku-php-apache2 public/
+    autoDeploy: true
+    plan: free
