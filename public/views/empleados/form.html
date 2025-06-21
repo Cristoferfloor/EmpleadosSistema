@@ -1,0 +1,242 @@
+<div class="container mt-4">
+    <h2>{{ isEdit ? 'Editar Empleado' : 'Nuevo Empleado' }}</h2>
+
+    <form name="empleadoForm" novalidate>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Datos Personales</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.nombres.$invalid && empleadoForm.nombres.$touched}">
+                            <label>Nombres*</label>
+                            <input type="text" class="form-control" name="nombres" ng-model="empleado.nombres" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.nombres.$invalid && empleadoForm.nombres.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.apellidos.$invalid && empleadoForm.apellidos.$touched}">
+                            <label>Apellidos*</label>
+                            <input type="text" class="form-control" name="apellidos" ng-model="empleado.apellidos"
+                                required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.apellidos.$invalid && empleadoForm.apellidos.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.cedula.$invalid && empleadoForm.cedula.$touched}">
+                            <label>Cédula*</label>
+                            <input type="text" class="form-control" name="cedula" ng-model="empleado.cedula" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.cedula.$invalid && empleadoForm.cedula.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.estado.$invalid && empleadoForm.estado.$touched}">
+                            <label>Estado*</label>
+                            <select class="form-control" name="estado" ng-model="empleado.estado" required>
+                                <option value="VIGENTE">Vigente</option>
+                                <option value="RETIRADO">Retirado</option>
+                            </select>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.estado.$invalid && empleadoForm.estado.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.fecha_nacimiento.$invalid && empleadoForm.fecha_nacimiento.$touched}">
+                            <label>Fecha de Nacimiento*</label>
+                            <input type="date" class="form-control" name="fecha_nacimiento"
+                                ng-model="empleado.fecha_nacimiento" ng-model-options="{timezone: 'UTC'}" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.fecha_nacimiento.$invalid && empleadoForm.fecha_nacimiento.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.email.$invalid && empleadoForm.email.$touched}">
+                            <label>Email*</label>
+                            <input type="email" class="form-control" name="email" ng-model="empleado.email" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.email.$invalid && empleadoForm.email.$touched">
+                                Ingrese un email válido
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.codigo_empleado.$invalid && empleadoForm.codigo_empleado.$touched}">
+                            <label>Código de Empleado*</label>
+                            <input type="text" class="form-control" name="codigo_empleado"
+                                ng-model="empleado.codigo_empleado" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.codigo_empleado.$invalid && empleadoForm.codigo_empleado.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Fotografía</label>
+                            <input type="file" class="form-control" file-model="empleado.fotografia">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones Personales</label>
+                    <textarea class="form-control" ng-model="empleado.observaciones_personales" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Datos Laborales</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.fecha_ingreso.$invalid && empleadoForm.fecha_ingreso.$touched}">
+                            <label>Fecha de Ingreso*</label>
+                            <input type="date" class="form-control" name="fecha_ingreso"
+                                ng-model="empleado.datos_laborales.fecha_ingreso" ng-model-options="{timezone: 'UTC'}"
+                                required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.fecha_ingreso.$invalid && empleadoForm.fecha_ingreso.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.cargo.$invalid && empleadoForm.cargo.$touched}">
+                            <label>Cargo*</label>
+                            <input type="text" class="form-control" name="cargo"
+                                ng-model="empleado.datos_laborales.cargo" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.cargo.$invalid && empleadoForm.cargo.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.departamento.$invalid && empleadoForm.departamento.$touched}">
+                            <label>Departamento*</label>
+                            <input type="text" class="form-control" name="departamento"
+                                ng-model="empleado.datos_laborales.departamento" required>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.departamento.$invalid && empleadoForm.departamento.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.provincia_id.$invalid && empleadoForm.provincia_id.$touched}">
+                            <label>Provincia*</label>
+                            <select class="form-control" name="provincia_id"
+                                ng-model="empleado.datos_laborales.provincia_id" required>
+                                <option value="">Seleccione una provincia...</option>
+                                <option ng-repeat="provincia in provincias" value="{{ provincia.id }}">{{
+                                    provincia.nombre_provincia }}</option>
+                            </select>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.provincia_id.$invalid && empleadoForm.provincia_id.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.sueldo.$invalid && empleadoForm.sueldo.$touched}">
+                            <label>Sueldo*</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">USD</span>
+                                </div>
+                                <input type="number" class="form-control" name="sueldo"
+                                    ng-model="empleado.datos_laborales.sueldo" step="0.01" min="0" required>
+                            </div>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.sueldo.$invalid && empleadoForm.sueldo.$touched">
+                                Ingrese un valor válido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"
+                            ng-class="{'has-error': empleadoForm.jornada_parcial.$invalid && empleadoForm.jornada_parcial.$touched}">
+                            <label>Jornada Parcial*</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="jornadaParcial" id="jornadaSi"
+                                    ng-model="empleado.datos_laborales.jornada_parcial" ng-value="true" required>
+                                <label class="form-check-label" for="jornadaSi">Sí</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="jornadaParcial" id="jornadaNo"
+                                    ng-model="empleado.datos_laborales.jornada_parcial" ng-value="false" required>
+                                <label class="form-check-label" for="jornadaNo">No</label>
+                            </div>
+                            <span class="help-block text-danger"
+                                ng-show="empleadoForm.jornada_parcial.$invalid && empleadoForm.jornada_parcial.$touched">
+                                Este campo es requerido
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones Laborales</label>
+                    <textarea class="form-control" ng-model="empleado.datos_laborales.observaciones_laborales"
+                        rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-secondary" ng-click="cancelar()">Cancelar</button>
+            <button type="button" class="btn btn-primary" ng-click="guardarEmpleado()"
+                ng-disabled="empleadoForm.$invalid || guardando">
+                <span ng-if="!guardando">Guardar</span>
+                <span ng-if="guardando">
+                    <i class="fa fa-spinner fa-spin"></i> Guardando...
+                </span>
+            </button>
+        </div>
+    </form>
+</div>
