@@ -1,10 +1,9 @@
 services:
   - type: web
     name: gestion-empleados
-    env: php
-    buildCommand: "composer install --no-dev --optimize-autoloader"
+    env: docker
+    dockerfilePath: ./Dockerfile
     startCommand: |
       php artisan migrate --force &&
-      vendor/bin/heroku-php-apache2 public/
-    autoDeploy: true
+      apache2-foreground
     plan: free
