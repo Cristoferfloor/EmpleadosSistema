@@ -1,0 +1,57 @@
+# Etapa 1: Construcción de dependencias
+FROM composer:2 AS vendor
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
+
+# Etapa 2: Construcción de aplicación
+FROM php:8.2-fpm-alpine
+
+# Instalamos extensiones necesarias para Laravel y MySQL
+RUN apk add --no-cache \
+    bash \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    freetype-dev \
+    oniguruma-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    curl \
+    npm \
+    mysql-client \
+    icu-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl
+
+# Instalar Composer globalmente
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Copiar dependencias de PHP instaladas en la etapa anterior
+COPY --from=vendor /app/vendor /app/vendor
+
+# Establecer directorio de trabajo
+WORKDIR /var/www/html
+
+# Copiar la aplicación
+COPY . .
+
+# Ajustes de permisos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Construir assets
+RUN npm install --production && npm run build || true
+
+# Comandos Laravel para optimizar y migrar
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan migrate --force || true
+
+# Puerto por defecto de PHP-FPM
+EXPOSE 9000
+
+CMD ["php-fpm"]
