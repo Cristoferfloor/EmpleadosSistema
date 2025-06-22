@@ -19,32 +19,24 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip sodium
 
-# Instalar Composer
+# Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Crear directorio de trabajo
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash && \
+    apt-get update && apt-get install -y nodejs
+
+# Set working directory
 WORKDIR /var/www/html
 
-# Copiar archivos de la app
+# Copy application files
 COPY . .
 
-# Instalar dependencias PHP
-RUN composer install --no-dev --optimize-autoloader
-
-# Instalar Node.js y Vite (opcional si usas Vite)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install --production \
-    && npm run build || true
-
-# Configuración y migraciones de Laravel
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan migrate --force || true
-
-# Puerto que usará Laravel si ejecutas con php artisan serve (no obligatorio en Railway)
+# Expose port used by `php artisan serve`
 EXPOSE 8000
 
-# Comando por defecto (opcional: puedes cambiar a php-fpm si prefieres usar nginx separado)
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Install PHP and JS dependencies
+RUN composer install
+RUN npm install
+
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
