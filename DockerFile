@@ -1,57 +1,50 @@
-# Etapa 1: Construcción de dependencias
-FROM composer:2 AS vendor
+FROM php:8.2-cli
 
-WORKDIR /app
-
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
-
-# Etapa 2: Construcción de aplicación
-FROM php:8.2-fpm-alpine
-
-# Instalamos extensiones necesarias para Laravel y MySQL
-RUN apk add --no-cache \
-    bash \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
-    oniguruma-dev \
-    libxml2-dev \
-    zip \
-    unzip \
+# Instala dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    git \
     curl \
-    npm \
-    mysql-client \
-    icu-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl
+    unzip \
+    zip \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    libsodium-dev \
+    libpq-dev \
+    default-mysql-client \
+    default-libmysqlclient-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip sodium
 
-# Instalar Composer globalmente
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copiar dependencias de PHP instaladas en la etapa anterior
-COPY --from=vendor /app/vendor /app/vendor
-
-# Establecer directorio de trabajo
+# Crear directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar la aplicación
+# Copiar archivos de la app
 COPY . .
 
-# Ajustes de permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+# Instalar dependencias PHP
+RUN composer install --no-dev --optimize-autoloader
 
-# Construir assets
-RUN npm install --production && npm run build || true
+# Instalar Node.js y Vite (opcional si usas Vite)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install --production \
+    && npm run build || true
 
-# Comandos Laravel para optimizar y migrar
+# Configuración y migraciones de Laravel
 RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache \
     && php artisan migrate --force || true
 
-# Puerto por defecto de PHP-FPM
-EXPOSE 9000
+# Puerto que usará Laravel si ejecutas con php artisan serve (no obligatorio en Railway)
+EXPOSE 8000
 
-CMD ["php-fpm"]
+# Comando por defecto (opcional: puedes cambiar a php-fpm si prefieres usar nginx separado)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
