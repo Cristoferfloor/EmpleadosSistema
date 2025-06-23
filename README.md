@@ -32,12 +32,6 @@ Este proyecto es una aplicación de gestión de empleados desarrollada como prue
 
 ---
 
-## 🎥 Video demostrativo
-
-🔗 [Ver video explicativo](https://tu-enlace-al-video.com)  
-_Reemplaza este enlace con el video real (YouTube, Google Drive, Loom, etc.)_
-
----
 
 ## 🚀 Requisitos
 
@@ -58,3 +52,37 @@ Sigue estos pasos para ejecutar el proyecto en tu entorno local:
 ```bash
 git clone https://github.com/Cristoferfloor/EmpleadosSistema.git
 cd EmpleadosSistema
+
+### 2. Instalar dependencias de PHP
+
+```bash
+composer install
+
+### 3. Copiar el archivo .env y configurar variables
+
+```bash
+cp .env.example .env
+
+Edita el archivo .env con los datos correctos de tu base de datos MySQL:
+```bash
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
+
+### 4. Generar la clave de la aplicación
+
+```bash
+php artisan key:generate
+
+### 5.  Ejecutar migraciones y seeders
+
+```bash
+php artisan key:generate
+
+### 5. Iniciar el servidor
+
+```bash
+php artisan serve
