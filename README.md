@@ -55,16 +55,14 @@ cd EmpleadosSistema
 
 ### 2. Instalar dependencias de PHP
 
-```bash
 composer install
 
 ### 3. Copiar el archivo .env y configurar variables
 
-```bash
 cp .env.example .env
 
 Edita el archivo .env con los datos correctos de tu base de datos MySQL:
-```bash
+
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -74,15 +72,12 @@ DB_PASSWORD=
 
 ### 4. Generar la clave de la aplicación
 
-```bash
 php artisan key:generate
 
 ### 5.  Ejecutar migraciones y seeders
 
-```bash
 php artisan key:generate
 
 ### 5. Iniciar el servidor
 
-```bash
 php artisan serve
