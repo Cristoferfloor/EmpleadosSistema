@@ -10,12 +10,11 @@ angular.module('empleadosApp')
     $scope.isEdit = false;
     $scope.guardando = false;
 
-    // Cargar provincias
     EmpleadoService.getProvincias().then(function(response) {
         $scope.provincias = response.data;
     });
 
-    // Modo edición
+
     if ($routeParams.id) {
         $scope.isEdit = true;
 
@@ -25,29 +24,21 @@ angular.module('empleadosApp')
             if (!$scope.empleado.datos_laborales) {
                 $scope.empleado.datos_laborales = {};
             }
-
-            // Convertir fechas
             if ($scope.empleado.fecha_nacimiento) {
                 $scope.empleado.fecha_nacimiento = new Date($scope.empleado.fecha_nacimiento);
             }
             if ($scope.empleado.datos_laborales.fecha_ingreso) {
                 $scope.empleado.datos_laborales.fecha_ingreso = new Date($scope.empleado.datos_laborales.fecha_ingreso);
             }
-
-            // Convertir tipos
             $scope.empleado.datos_laborales.sueldo = parseFloat($scope.empleado.datos_laborales.sueldo || 0);
             $scope.empleado.datos_laborales.jornada_parcial = $scope.empleado.datos_laborales.jornada_parcial === true || $scope.empleado.datos_laborales.jornada_parcial === 1;
 
             $scope.empleado.datos_laborales.provincia_id = String($scope.empleado.datos_laborales.provincia_id || '');
         });
     }
-
-    // Guardar empleado
     $scope.guardarEmpleado = function() {
         $scope.guardando = true;
         const datos = $scope.empleado.datos_laborales;
-
-        // Validaciones de tipo
         datos.jornada_parcial = (datos.jornada_parcial === true || datos.jornada_parcial === 'true');
         datos.provincia_id = parseInt(datos.provincia_id);
         datos.sueldo = parseFloat(datos.sueldo);

@@ -49,7 +49,7 @@ angular.module('empleadosApp')
     if (confirm('¿Estás seguro de eliminar este empleado?')) {
         EmpleadoService.deleteEmpleado(id).then(function(response) {
             alert(response.data.message);
-            $scope.loadEmpleados(); // refrescar lista
+            $scope.loadEmpleados(); 
         }, function(error) {
             alert('Error al eliminar empleado');
             console.error(error);
@@ -58,17 +58,16 @@ angular.module('empleadosApp')
 };
     $scope.generarReporte = function() {
         EmpleadoService.getReporte().then(function(response) {
-            // Implementar lógica para descargar el reporte
             console.log(response.data);
             alert('Reporte generado. Ver consola para detalles.');
         });
     };
    $scope.generarReporte = function() {
         EmpleadoService.generarReportePdf().then(function(response) {
-            // Crear un blob con los datos del PDF
+           
             var file = new Blob([response.data], {type: 'application/pdf'});
             
-            // Crear un enlace para descargar el archivo
+        
             var fileURL = URL.createObjectURL(file);
             var a = document.createElement('a');
             a.href = fileURL;
@@ -77,7 +76,7 @@ angular.module('empleadosApp')
             document.body.appendChild(a);
             a.click();
             
-            // Limpiar
+       
             setTimeout(function() {
                 document.body.removeChild(a);
                 URL.revokeObjectURL(fileURL);  
